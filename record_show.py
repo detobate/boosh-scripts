@@ -2,6 +2,7 @@
 import requests
 import sys,os,signal
 import time,datetime
+import eyed3
 
 # Expects arguments --source-name=live_dj --source-status=false
 
@@ -29,6 +30,14 @@ def recordStream():
                 f.write(block)
         except KeyboardInterrupt:
             os.unlink(PIDFILE)
+
+    writeID3(FILENAME, current)
+
+def writeID3(file, title):
+    show = eyed3.load(file)
+    show.tag.title = title
+    show.tag.save()
+
 
 def main():
 
