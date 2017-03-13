@@ -14,15 +14,18 @@ def getCurrentSong():
     ''' Replace this with a call to Icecast once it's been upgraded to 2.4.0
         and can spit out JSON '''
     with open(playlist, 'r', errors='ignore') as f:
-        q = deque(f, 1).pop().split('|')
-        return(q[len(q)-1].rstrip())
+        try:
+            q = deque(f, 1).pop().split('|')
+            return(q[len(q)-1].rstrip())
+        except:
+            return None
 
 def checkLive():
-    results = requests.get(url)
     try:
+        results = requests.get(url)
         results = json.loads(results.text)
     except:
-        exit(1)
+        results = None
 
     return(results)
 
@@ -32,7 +35,10 @@ def main():
     while True:
 
         results = checkLive()
-        live = results['livedj']
+        try:
+            live = results['livedj']
+        except:
+            live = "off"
 
         if live == "off":
             current = getCurrentSong()
