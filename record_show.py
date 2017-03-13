@@ -57,7 +57,7 @@ def main():
         print("Creating pid lock file")
         with open(PIDFILE, "w") as f:
             f.write(PID)
-        print("Starting recording")
+        print("Looking for live DJ")
         recordStream()
         os.unlink(PIDFILE)
 
