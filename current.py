@@ -48,7 +48,7 @@ def main():
         with open(output, 'w') as f:
             f.write(current)
 
-        time.sleep(5)
+        time.sleep(2)
 
 
 if __name__ == "__main__":
