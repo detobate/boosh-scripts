@@ -43,7 +43,10 @@ def main():
         if live == "off":
             current = getCurrentSong()
         elif live == "on":
-            current = "Live: " + results['currentShow'][0]['name']
+            try:
+                current = "Live: " + results['currentShow'][0]['name']
+            except:
+                current = None
 
         with open(output, 'w') as f:
             f.write(current)
