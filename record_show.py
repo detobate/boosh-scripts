@@ -26,13 +26,18 @@ def recordStream():
     show = current+"-"+now
     FILENAME = RECORD_DIR+show+".mp3"
     print("Recording: %s" % FILENAME)
-    with open(FILENAME, 'wb') as f:
+
+    #Create empty file and write id3 tags:
+    open(FILENAME, 'a').close()
+    update_metadata(FILENAME, show)
+
+    # Open file and 'a'ppend 'b'ytestream after ID3 tag.
+    with open(FILENAME, 'ab') as f:
         try:
             for block in r.iter_content(1024):
                 f.write(block)
-        except KeyboardInterrupt:
-            update_metadata(FILENAME, show)
-            os.unlink(PIDFILE) # Clean up PID file
+        except:
+            print("Couldn't read from %s" % r.url)
 
 
 def update_metadata(filename, show):
@@ -41,14 +46,14 @@ def update_metadata(filename, show):
     file.tags['TITLE'] = [show]
     file.save()
 
-
 def main():
 
     if sys.argv[1] == "--source-name=live_dj" and sys.argv[2] == "--source-status=false" and os.path.isfile(PIDFILE):
         with open(PIDFILE, "r") as p:
             PID=p.readline()
         print("Killing %s" % PID)
-        os.kill(int(PID), signal.SIGINT)
+        os.kill(int(PID), signal.SIGKILL) # Catching SIGINT gracefully wasn't behaving with the stream
+        os.unlink(PIDFILE)
 
     elif sys.argv[1] == "--source-name=live_dj" and sys.argv[2] == "--source-status=true" and os.path.isfile(PIDFILE):
         print("Error: Already recording.")
