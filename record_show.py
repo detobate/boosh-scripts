@@ -17,13 +17,13 @@ def recordStream():
     while current[:5] != "Live:":
         r = requests.get(CURRENT_URL)
         current = r.text
-        time.sleep(1)
+        time.sleep(3)
     current = current[6:].rstrip() #Strip off the Live: and other fluff at the end
 
     r = requests.get(URL, stream=True)
     now = datetime.datetime.now()
     now = now.strftime("%Y%m%d")
-    show = current+"-"+now
+    show = current+" - "+now
     FILENAME = RECORD_DIR+show+".mp3"
     print("Recording: %s" % FILENAME)
 
