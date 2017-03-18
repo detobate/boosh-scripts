@@ -46,7 +46,7 @@ def main():
             try:
                 current = "Live: " + results['currentShow'][0]['name']
             except:
-                current = None
+                current = ''
 
         with open(output, 'w') as f:
             f.write(current)
