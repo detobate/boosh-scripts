@@ -17,7 +17,7 @@ def recordStream():
     while current[:5] != "Live:":
         r = requests.get(CURRENT_URL)
         current = r.text
-        time.sleep(3)
+        time.sleep(1)
     current = current[6:].rstrip() #Strip off the Live: and other fluff at the end
 
     r = requests.get(URL, stream=True)
