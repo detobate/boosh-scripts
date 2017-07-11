@@ -9,7 +9,7 @@ import taglib
 RECORD_DIR="/home/detonate/boosh_recordings/"
 URL="http://stream.boosh.fm:8000/boosh256mp3"
 PIDFILE="/tmp/boosh_recording.pid"
-CURRENT_URL="http://boosh.fm/current"
+CURRENT_URL="https://boosh.fm/current"
 
 def recordStream():
     current = ''
