@@ -11,7 +11,7 @@ URL="http://stream.boosh.fm:8000/boosh256mp3"
 PIDFILE="/tmp/boosh_recording.pid"
 CURRENT_URL="https://boosh.fm/current"
 
-def recordStream():
+def record_stream():
     current = ''
     # Wait until we have the live show name
     while current[:5] != "Live:":
@@ -52,7 +52,10 @@ def main():
         with open(PIDFILE, "r") as p:
             PID=p.readline()
         print("Killing %s" % PID)
-        os.kill(int(PID), signal.SIGKILL) # Catching SIGINT gracefully wasn't behaving with the stream
+        try:
+            os.kill(int(PID), signal.SIGKILL) # Catching SIGINT gracefully wasn't behaving with the stream
+        except ProcessLookupError:
+            print("%s is already dead. Removing PID file" % PID)
         os.unlink(PIDFILE)
 
     elif sys.argv[1] == "--source-name=live_dj" and sys.argv[2] == "--source-status=true" and os.path.isfile(PIDFILE):
@@ -67,7 +70,7 @@ def main():
         with open(PIDFILE, "w") as f:
             f.write(PID)
         print("Looking for live DJ")
-        recordStream()
+        record_stream()
 
     elif sys.argv[1] == "--source-name=live_dj" and sys.argv[2] == "--source-status=false" and not os.path.isfile(PIDFILE):
         print("Nothing to do")
